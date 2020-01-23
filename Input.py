@@ -23,17 +23,17 @@ class Input:
 
         conn.close()
 
-    def submit(self,description, earning): # Insert values into earning table
+    def submit(self,description, earning, location, cc): # Insert values into earning table
         self.action["state"] = "disabled"
         self.description = description
         self.earning = earning
+        self.location = location
+        self.cc = cc
         try:
             sqliteConnection = sqlite3.connect('daily_earning.db')
             cursor = sqliteConnection.cursor()
             print("Successfully Connected to SQLite")
-
-            sqlite_insert_query = "INSERT INTO DAILY_EARNING_CHART (DESCRIPTION,EARNING,TIME) VALUES ('" + self.description + "','"+ self.earning + "',datetime('now', 'localtime'))"
-
+            sqlite_insert_query = "INSERT INTO DAILY_EARNING_CHART (DESCRIPTION,EARNING,TYPE, LOCATION, TIME) VALUES ('" + self.description + "','"+ self.earning +  "','" + self.cc +  "','" + self.location + "',datetime('now', 'localtime'))"
             count = cursor.execute(sqlite_insert_query)
             sqliteConnection.commit()
             print("Record inserted successfully into DAILY_EARNING_CHART table", cursor.rowcount)
