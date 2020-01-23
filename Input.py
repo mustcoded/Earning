@@ -14,6 +14,7 @@ class Input:
                  DESCRIPTION    TEXT (50)   NOT NULL,
                  EARNING    TEXT  NOT NULL,
                  TYPE TEXT NOT NULL,
+                 LOCATION TEXT NOT NULL,
                  TIME   TEXT NOT NULL);''')
         except:
             pass
