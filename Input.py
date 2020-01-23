@@ -75,7 +75,7 @@ class Input:
                     label_y.append(value)
             # begin plotting the bar chart
             s = pd.Series(index=label_x, data=label_y)
-            s.plot(color="green", kind="bar")
+            s.plot(color="green", kind="bar", title = cc + " Sales for January at " + location)
             plt.show()
 
         except sqlite3.Error as error:
