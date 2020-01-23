@@ -63,9 +63,29 @@ location_combo['values']  = ('Down Town', 'Market', 'Bus Station', 'Beach')
 location_combo.current(0)
 location_combo.grid(column=0, row=0)
 
+
+def plot(cc): # plotting the bar chart of total sales
+    sub_mit.plot(location.get(), cc)
+
+#create label frame for the plot graph ui
+plot_frame= ttk.Labelframe(win, text ="Plotting Graph")
+plot_frame.grid(column=0, row=2, padx=4, pady=4, sticky='w')
+# create combo box for the sale location
+plot_location = tk.StringVar()
+plocation_combo = ttk.Combobox(plot_frame, width=13, textvariable = plot_location)
+plocation_combo['values']  = ('Down Town', 'Market', 'Bus Station', 'Beach')
+plocation_combo.current(0)
+plocation_combo.grid(column=0, row=0)
+# create the plot button for shoe type
+action_pshoe = ttk.Button(plot_frame, text="Shoe", command= lambda: plot("Shoe"))
+action_pshoe.grid(column=1, row=0)
+# create the plot button for shirt type
+action_pshirt = ttk.Button(plot_frame, text="Shirt", command= lambda: plot("Shirt"))
+action_pshirt.grid(column=2, row=0)
+
 win.resizable(0,0)
 
-sub_mit = Input(action_shoe)
+sub_mit = Input()
 sub_mit.setting()
 
 win.mainloop()

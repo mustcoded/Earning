@@ -1,11 +1,13 @@
 import sqlite3
+import pandas as pd
+import matplotlib.pyplot as plt
 
 class Input:
-    def __init__(self, action):
-        self.action = action
+    def __init__(self):
+        pass
 
     def setting(self):
-        self.action["state"] = "disabled"
+
         conn = sqlite3.connect('daily_earning.db')
         print("Opened database successfully")
         try:
@@ -19,12 +21,12 @@ class Input:
         except:
             pass
 
-        self.action["state"] = "enable"
+
 
         conn.close()
 
     def submit(self,description, earning, location, cc): # Insert values into earning table
-        self.action["state"] = "disabled"
+
         self.description = description
         self.earning = earning
         self.location = location
@@ -44,4 +46,40 @@ class Input:
         finally:
             if (sqliteConnection):
                 sqliteConnection.close()
-            self.action["state"] = "enable"
+
+    def plot(self, location, cc): # plotting the bar chart
+        try:
+            shoe_dict = {'Baby Girl' : 0.00, 'Baby Boy' : 0.00, 'Boy':0.00, 'Girl':0.00, 'Man':0.00, 'Woman':0.00}
+            shirt_dict = {'T-Shirt':0.00, 'School Uniform':0.00, 'Baby Cloth':0.00, 'Jacket':0.00, 'Blouse':0.00, 'Pajamas':0.00}
+            sqliteConnection = sqlite3.connect('daily_earning.db')
+            cursor = sqliteConnection.cursor()
+            print("Successfully Connected to SQLite")
+            cursor.execute("SELECT * FROM DAILY_EARNING_CHART WHERE TYPE=? AND LOCATION=?", (cc, location))
+            rows = cursor.fetchall()
+
+            for row in rows:
+                if cc=="Shoe":
+                    shoe_dict[row[1]] += float(row[2])
+                elif cc=="Shirt":
+                    shirt_dict[row[1]] += float(row[2])
+            label_x = []
+            label_y = []
+
+            if cc=="Shoe":
+                for key, value in shoe_dict.items():
+                    label_x.append(key)
+                    label_y.append(value)
+            elif cc=="Shirt":
+                for key, value in shirt_dict.items():
+                    label_x.append(key)
+                    label_y.append(value)
+            # begin plotting the bar chart
+            s = pd.Series(index=label_x, data=label_y)
+            s.plot(color="green", kind="bar")
+            plt.show()
+
+        except sqlite3.Error as error:
+            print("Failed to plot earning data", error)
+        finally:
+            if (sqliteConnection):
+                sqliteConnection.close()
