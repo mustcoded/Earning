@@ -21,8 +21,6 @@ class Input:
         except:
             pass
 
-
-
         conn.close()
 
     def submit(self,description, earning, location, cc): # Insert values into earning table
@@ -54,7 +52,10 @@ class Input:
             sqliteConnection = sqlite3.connect('daily_earning.db')
             cursor = sqliteConnection.cursor()
             print("Successfully Connected to SQLite")
-            cursor.execute("SELECT * FROM DAILY_EARNING_CHART WHERE TYPE=? AND LOCATION=?", (cc, location))
+            if cc=='All Items':
+                cursor.execute("SELECT * FROM DAILY_EARNING_CHART WHERE LOCATION=?", (location,))
+            else:
+                cursor.execute("SELECT * FROM DAILY_EARNING_CHART WHERE TYPE=? AND LOCATION=?", (cc, location))
             rows = cursor.fetchall()
 
             for row in rows:
@@ -62,6 +63,12 @@ class Input:
                     shoe_dict[row[1]] += float(row[2])
                 elif cc=="Shirt":
                     shirt_dict[row[1]] += float(row[2])
+                elif cc=="All Items":
+                    if row[1] in shoe_dict:
+                        shoe_dict[row[1]] += float(row[2])
+                    else:
+                        shirt_dict[row[1]] += float(row[2])
+
             label_x = []
             label_y = []
 
@@ -71,6 +78,13 @@ class Input:
                     label_y.append(value)
             elif cc=="Shirt":
                 for key, value in shirt_dict.items():
+                    label_x.append(key)
+                    label_y.append(value)
+            else:
+                for key, value in shirt_dict.items():
+                    label_x.append(key)
+                    label_y.append(value)
+                for key, value in shoe_dict.items():
                     label_x.append(key)
                     label_y.append(value)
             # begin plotting the bar chart
