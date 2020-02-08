@@ -65,10 +65,10 @@ location_combo.grid(column=0, row=0)
 
 
 def plot(cc): # plotting the bar chart of total sales
-    sub_mit.plot(location.get(), cc)
+    sub_mit.plot(location.get(), cc, month.get())
 
 #create label frame for the plot graph ui
-plot_frame= ttk.Labelframe(win, text ="Plotting Graph")
+plot_frame= ttk.Labelframe(win, text ="Plotting Graph Select Date")
 plot_frame.grid(column=0, row=2, padx=4, pady=4, sticky='w')
 
 # create the plot button for shoe type
@@ -80,6 +80,13 @@ action_pshirt.grid(column=2, row=0)
 # create the plot button for all items
 action_p_loc = ttk.Button(plot_frame, text="All Items", command= lambda: plot("All Items"))
 action_p_loc.grid(column=3, row=0)
+
+# create combo box for the sale's month
+month = tk.StringVar()
+month_combo = ttk.Combobox(plot_frame, width=3, textvariable = month)
+month_combo['values']  = ('01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12')
+month_combo.current(0)
+month_combo.grid(column=4, row=0)
 
 win.resizable(0,0)
 
